@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Glass App</title>
+    <style>
+        /* Apple-style typography and smooth colorful background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* The Glassmorphism Card */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Apple-style frosted buttons */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .glass-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Output console area */
+        #output-console {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 14px;
+            min-height: 40px;
+            color: #555;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <h1>Script Controller</h1>
+        
+        <button class="glass-btn" onclick="runScript('1')">▶ Run Script 1</button>
+        <button class="glass-btn" onclick="runScript('2')">▶ Run Script 2</button>
+
+        <div id="output-console">Output will appear here...</div>
+    </div>
+
+    <script>
+        async function runScript(scriptNum) {
+            const consoleEl = document.getElementById('output-console');
+            consoleEl.innerText = `Running Script ${scriptNum}...`;
+
+            try {
+                // Send a POST request to the Flask backend
+                const response = await fetch(`/run-script-${scriptNum}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                consoleEl.innerText = data.message;
+                
+            } catch (error) {
+                consoleEl.innerText = `Error: Could not connect to backend.`;
+            }
+        }
+    </script>
+</body>
+</html>
